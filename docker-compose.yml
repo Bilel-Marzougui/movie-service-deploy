@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  mongo:
+    container_name: mongo-movies
+    image: mongo:latest
+    restart: always
+    environment:
+      MONDODB_DATABASE: movies-management
+      MONGO_INITDB_DATABASE: movies-management
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  redis-stack:
+    image: redis/redis-stack:latest
+    ports:
+      - "6379:6379"
+      - "8001:8001"
+
+volumes:
+  mongo-data:
+    driver: local
