@@ -8,6 +8,11 @@ pipeline {
             steps {
                 sh "mvn test"
             }
+            post {
+                always{
+                    jacoco execPattern: 'target/jacoco.exec'
+                }
+            } 
         }
         stage('Mutations Tests - PIT') {
             steps {
