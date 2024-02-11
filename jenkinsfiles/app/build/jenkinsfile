@@ -4,12 +4,29 @@ pipeline {
         maven 'mvn'
     }
     stages {
+        stage('Unit Tests - JUnit and JaCoCo') {
+            steps {
+                sh "mvn test"
+            }
+        }
+        stage('Mutations Tests - PIT') {
+            steps {
+                sh "mvn org.pitest:pitest-maven:mutationCoverage"
+            }
+            post {
+                always{
+                    pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+                }
+            }
+        }
         stage('Build Artifact') {
             steps {
                 sh "mvn clean package -DskipTests=true"
                 archive 'target/*.jar' ///higguygygygjj
             }
         }
+
+        /*
         stage('docker') {
             steps {
                 sh 'docker version'
@@ -24,6 +41,7 @@ pipeline {
                 }
             }
         }
+        */
 
     }
 }
